@@ -11,6 +11,7 @@ namespace MyASPCoreProject.DAL
 {
     public class StudentDAL : IStudentDAL
     {
+        //DAL
         private IConfiguration _config;
         public StudentDAL(IConfiguration config)
         {
