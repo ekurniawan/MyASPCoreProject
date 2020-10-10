@@ -33,7 +33,7 @@ namespace MyASPCoreProject.DAL
             List<Student> lstStudent = new List<Student>();
             using (SqlConnection conn = new SqlConnection(GetConnectionString()))
             {
-                string strSql = @"select from Students order by Nim asc";
+                string strSql = @"select * from Students order by Nim asc";
                 SqlCommand cmd = new SqlCommand(strSql, conn);
                 conn.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
