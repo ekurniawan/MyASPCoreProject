@@ -26,7 +26,20 @@ namespace MyASPCoreProject.DAL
 
         public int Delete(string id)
         {
-            throw new NotImplementedException();
+            using(SqlConnection conn = new SqlConnection(GetConnectionString()))
+            {
+                string strSql = @"delete from Students where Nim=@Nim";
+                var param = new { Nim = id };
+                try
+                {
+                    var result = conn.Execute(strSql, param);
+                    return result;
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+            }
         }
 
         public IEnumerable<Student> GetAll()

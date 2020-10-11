@@ -100,22 +100,35 @@ namespace MyASPCoreProject.Controllers
         }
 
         // GET: StudentController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
-            return View();
+            var model = _student.GetById(id);
+            return View(model);
         }
 
         // POST: StudentController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [ActionName("Delete")]
+        public ActionResult DeletePost(string id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var result = _student.Delete(id);
+                if (result == 1)
+                {
+                    TempData["Pesan"] = $"<span class='alert alert-success'>Berhasil mendelete data nim:{id}</span><br/><br />";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.PesanError = $"<span class='alert alert-danger'>Gagal mendelete data student</span>";
+                    return View();
+                }
             }
-            catch
+            catch(Exception ex)
             {
+                ViewBag.PesanError = $"<span class='alert alert-danger'>{ex.Message}</span>";
                 return View();
             }
         }
