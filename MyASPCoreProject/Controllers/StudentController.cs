@@ -20,6 +20,9 @@ namespace MyASPCoreProject.Controllers
         // GET: StudentController
         public ActionResult Index()
         {
+            if (TempData["Pesan"] != null)
+                ViewBag.Pesan = TempData["Pesan"];
+
             var model = _student.GetAll().ToList();
             return View(model);
         }
@@ -47,6 +50,7 @@ namespace MyASPCoreProject.Controllers
                 var result = _student.Insert(student);
                 if (result == 1)
                 {
+                    TempData["Pesan"] = $"<span class='alert alert-success'>Berhasil menambah data student {student.Nama}</span>";
                     return RedirectToAction("Index");
                 }
                 else
