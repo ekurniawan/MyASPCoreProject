@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyASPCoreProject.DAL;
+using MyASPCoreProject.Data;
 
 namespace MyASPCoreProject
 {
@@ -32,6 +34,9 @@ namespace MyASPCoreProject
                 option.Cookie.HttpOnly = true;
                 option.Cookie.IsEssential = true;
             });
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
+                Configuration.GetConnectionString("EFConnection")));
 
             services.AddTransient<IUser, UserDAL>();
             services.AddTransient<IStudentDAL, StudentDAL>();
