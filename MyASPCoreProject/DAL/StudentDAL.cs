@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 
 
 namespace MyASPCoreProject.DAL
@@ -29,6 +30,16 @@ namespace MyASPCoreProject.DAL
         }
 
         public IEnumerable<Student> GetAll()
+        {
+            using(SqlConnection conn = new SqlConnection(GetConnectionString()))
+            {
+                string strSql = @"select * from Students order by Nim asc";
+                var results = conn.Query<Student>(strSql);
+                return results;
+            }
+        }
+
+        /*public IEnumerable<Student> GetAll()
         {
             List<Student> lstStudent = new List<Student>();
             using (SqlConnection conn = new SqlConnection(GetConnectionString()))
@@ -55,11 +66,17 @@ namespace MyASPCoreProject.DAL
                 conn.Close();
             }
             return lstStudent;
-        }
+        }*/
 
         public Student GetById(string id)
         {
-            throw new NotImplementedException();
+            using(SqlConnection conn = new SqlConnection(GetConnectionString()))
+            {
+                string strSql = @"select * from Students where Nim=@Nim";
+                var param = new { Nim = id };
+                var result = conn.QuerySingle<Student>(strSql, param);
+                return result;
+            }
         }
 
         public IEnumerable<Student> GetByName(string name)
