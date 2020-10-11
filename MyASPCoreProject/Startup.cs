@@ -24,6 +24,15 @@ namespace MyASPCoreProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //pengaturan session
+            services.AddDistributedMemoryCache();
+            services.AddSession(option=>
+            {
+                option.IdleTimeout = TimeSpan.FromSeconds(15);
+                option.Cookie.HttpOnly = true;
+                option.Cookie.IsEssential = true;
+            });
+
             services.AddTransient<IStudentDAL, StudentDAL>();
             services.AddControllersWithViews();
         }
@@ -48,6 +57,8 @@ namespace MyASPCoreProject
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
