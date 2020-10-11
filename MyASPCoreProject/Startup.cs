@@ -33,6 +33,7 @@ namespace MyASPCoreProject
                 option.Cookie.IsEssential = true;
             });
 
+            services.AddTransient<IUser, UserDAL>();
             services.AddTransient<IStudentDAL, StudentDAL>();
             services.AddControllersWithViews();
         }

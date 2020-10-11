@@ -20,6 +20,14 @@ namespace MyASPCoreProject.Controllers
         // GET: StudentController
         public ActionResult Index()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+            {
+                TempData["Pesan"] = "<span class='alert alert-danger'>Anda belum login/span>";
+                return RedirectToAction("Login", "User");
+            }
+            else
+                TempData["Pesan"] = string.Empty;
+
             if (TempData["Pesan"] != null)
                 ViewBag.Pesan = TempData["Pesan"];
 

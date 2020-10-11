@@ -35,12 +35,19 @@ namespace MyASPCoreProject.Controllers
             if (cek)
             {
                 HttpContext.Session.SetString("User", user.Username);
+                TempData["Pesan"] = string.Empty;
                 return RedirectToAction("Index","Student");
             }
             else
             {
                 return View();
             }
+        }
+
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
         }
 
         // GET: UserController1cs/Details/5
