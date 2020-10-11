@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyASPCoreProject.DAL;
+using MyASPCoreProject.Models;
 
 namespace MyASPCoreProject.Controllers
 {
@@ -19,15 +20,15 @@ namespace MyASPCoreProject.Controllers
         // GET: StudentController
         public ActionResult Index()
         {
-            var results = _student.GetAll().ToList();
-            var data = results[0].Nama;
-            return Content($"Nama student : {data}");
+            var model = _student.GetAll().ToList();
+            return View(model);
         }
 
         // GET: StudentController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
-            return View();
+            var model = _student.GetById(id);
+            return View(model);
         }
 
         // GET: StudentController/Create
@@ -39,14 +40,24 @@ namespace MyASPCoreProject.Controllers
         // POST: StudentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Student student)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var result = _student.Insert(student);
+                if (result == 1)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.PesanError = $"<span class='alert alert-danger'>Gagal menambah data student {student.Nama}</span>";
+                    return View();
+                }
             }
-            catch
+            catch(Exception ex)
             {
+                ViewBag.PesanError = $"<span class='alert alert-danger'>{ex.Message}</span>";
                 return View();
             }
         }

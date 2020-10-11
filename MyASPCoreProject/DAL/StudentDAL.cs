@@ -86,7 +86,20 @@ namespace MyASPCoreProject.DAL
 
         public int Insert(Student obj)
         {
-            throw new NotImplementedException();
+            using(SqlConnection conn = new SqlConnection(GetConnectionString()))
+            {
+                string strSql = @"insert into Students(Nama,Alamat,Telp) values(@Nama,@Alamat,@Telp)";
+                var param = new { Nama = obj.Nama, Alamat = obj.Alamat, Telp = obj.Telp };
+                try
+                {
+                    var result = conn.Execute(strSql, param);
+                    return result;
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception($"Error: {sqlEx.Message}");
+                }
+            }
         }
 
         public int Update(Student obj)
