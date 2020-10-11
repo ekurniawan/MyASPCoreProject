@@ -50,7 +50,7 @@ namespace MyASPCoreProject.Controllers
                 var result = _student.Insert(student);
                 if (result == 1)
                 {
-                    TempData["Pesan"] = $"<span class='alert alert-success'>Berhasil menambah data student {student.Nama}</span>";
+                    TempData["Pesan"] = $"<span class='alert alert-success'>Berhasil menambah data student {student.Nama}</span><br/><br />";
                     return RedirectToAction("Index");
                 }
                 else
@@ -67,22 +67,34 @@ namespace MyASPCoreProject.Controllers
         }
 
         // GET: StudentController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            var model = _student.GetById(id);
+            return View(model);
         }
 
         // POST: StudentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Student student)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var result = _student.Update(student);
+                if (result == 1)
+                {
+                    TempData["Pesan"] = $"<span class='alert alert-success'>Berhasil mengupdate data student {student.Nama}</span><br/><br />";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.PesanError = $"<span class='alert alert-danger'>Gagal mengupdate data student {student.Nama}</span>";
+                    return View();
+                }
             }
-            catch
+            catch(Exception ex)
             {
+                ViewBag.PesanError = $"<span class='alert alert-danger'>{ex.Message}</span>";
                 return View();
             }
         }

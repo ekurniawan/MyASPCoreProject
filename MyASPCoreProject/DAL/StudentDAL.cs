@@ -104,7 +104,21 @@ namespace MyASPCoreProject.DAL
 
         public int Update(Student obj)
         {
-            throw new NotImplementedException();
+            using(SqlConnection conn = new SqlConnection(GetConnectionString()))
+            {
+                string strSql = @"update Students set Nama=@Nama,Alamat=@Alamat,Telp=@Telp 
+                                  where Nim=@Nim";
+                var param = new { Nama = obj.Nama, Alamat = obj.Alamat, Telp = obj.Telp, Nim = obj.Nim };
+                try
+                {
+                    var result = conn.Execute(strSql, param);
+                    return result;
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+            }
         }
     }
 }
