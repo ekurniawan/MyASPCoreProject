@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,22 +29,29 @@ namespace MyASPCoreProject
         public void ConfigureServices(IServiceCollection services)
         {
             //pengaturan session
-            services.AddDistributedMemoryCache();
-            services.AddSession(option=>
-            {
-                option.IdleTimeout = TimeSpan.FromSeconds(15);
-                option.Cookie.HttpOnly = true;
-                option.Cookie.IsEssential = true;
-            });
+            //services.AddDistributedMemoryCache();
+            //services.AddSession(option=>
+            //{
+            //    option.IdleTimeout = TimeSpan.FromSeconds(15);
+            //    option.Cookie.HttpOnly = true;
+            //    option.Cookie.IsEssential = true;
+            //});
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("EFConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultUI()
+                .AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<IEnrollment, EnrollmentDAL>();
             services.AddTransient<ICourse, CourseDAL>();
             services.AddTransient<IUser, UserDAL>();
             services.AddTransient<IStudentDAL, StudentDAL>();
             services.AddControllersWithViews();
+            services.AddRazorPages();
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //   .AddCookie();
+            //services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,18 +70,19 @@ namespace MyASPCoreProject
 
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseSession();
 
-            app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyASPCoreProject.DAL;
@@ -9,6 +10,7 @@ using MyASPCoreProject.Models;
 
 namespace MyASPCoreProject.Controllers
 {
+    [Authorize]
     public class CourseController : Controller
     {
         private ICourse _course;
@@ -18,6 +20,7 @@ namespace MyASPCoreProject.Controllers
         }
 
         // GET: CourseController
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var models = _course.GetAll();
@@ -80,19 +83,22 @@ namespace MyASPCoreProject.Controllers
         // GET: CourseController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var model = _course.GetById(id.ToString());
+            return View(model);
         }
 
         // POST: CourseController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [ActionName("Delete")]
+        public ActionResult DeletePost(int id)
         {
             try
             {
+                _course.Delete(id.ToString());
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
             }

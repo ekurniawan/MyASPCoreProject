@@ -18,12 +18,22 @@ namespace MyASPCoreProject.DAL
 
         public int Delete(string id)
         {
-            throw new NotImplementedException();
+            var result = GetById(id);
+            try
+            {
+                _context.Courses.Remove(result);
+                int ret = _context.SaveChanges();
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public IEnumerable<Course> GetAll()
         {
-            var results = from c in _context.Courses
+            var results = from c in _context.Courses.AsNoTracking()
                           select c;
             return results;
         }
