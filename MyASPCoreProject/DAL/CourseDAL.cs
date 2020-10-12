@@ -1,4 +1,5 @@
-﻿using MyASPCoreProject.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using MyASPCoreProject.Data;
 using MyASPCoreProject.Models;
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,17 @@ namespace MyASPCoreProject.DAL
 
         public IEnumerable<Course> GetAll()
         {
-            throw new NotImplementedException();
+            var results = from c in _context.Courses
+                          select c;
+            return results;
         }
 
         public Course GetById(string id)
         {
-            throw new NotImplementedException();
+            var result = (from c in _context.Courses.Include(s=>s.Enrollments).ThenInclude(s=>s.MyStudent)
+                          where c.CourseID == Convert.ToInt32(id)
+                          select c).SingleOrDefault();
+            return result;
         }
 
         public int Insert(Course obj)
@@ -46,7 +52,28 @@ namespace MyASPCoreProject.DAL
 
         public int Update(Course obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = (from c in _context.Courses
+                              where c.CourseID == obj.CourseID
+                              select c).SingleOrDefault();
+                if(result!=null)
+                {
+                    result.Title = obj.Title;
+                    result.Credits = obj.Credits;
+
+                    var status = _context.SaveChanges();
+                    return status;
+                }
+                else
+                {
+                    throw new Exception("Gagal update data");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

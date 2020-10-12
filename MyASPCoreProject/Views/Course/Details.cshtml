@@ -1,0 +1,56 @@
+﻿@model MyASPCoreProject.Models.Course
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Course</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CourseID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CourseID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Credits)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Credits)
+        </dd>
+    </dl>
+</div>
+
+<table class="table table-striped">
+    <tr>
+        <th>Enrollment ID</th>
+        <th>Grade</th>
+        <th>Course ID</th>
+        <th>Student</th>
+    </tr>
+    @foreach (var enroll in Model.Enrollments)
+    {
+        <tr>
+            <td>@enroll.EnrollmentID</td>
+            <td>@enroll.Grade</td>
+            <td>@enroll.CourseID</td>
+            <td>@enroll.MyStudent.FirstMidName</td>
+        </tr>
+    }
+</table>
+
+
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -38,6 +38,7 @@ namespace MyASPCoreProject
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("EFConnection")));
 
+            services.AddTransient<IEnrollment, EnrollmentDAL>();
             services.AddTransient<ICourse, CourseDAL>();
             services.AddTransient<IUser, UserDAL>();
             services.AddTransient<IStudentDAL, StudentDAL>();

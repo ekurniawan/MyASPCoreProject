@@ -13,5 +13,8 @@ namespace MyASPCoreProject.Data
         {
         }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<MyStudent> MyStudents { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+
     }
 }

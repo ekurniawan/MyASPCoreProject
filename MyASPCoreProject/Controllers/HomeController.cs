@@ -33,5 +33,12 @@ namespace MyASPCoreProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+        public ActionResult ChangeSelectedItem(string student)
+        {
+            ViewBag.Student = student;
+            return View();
+        }
     }
 }

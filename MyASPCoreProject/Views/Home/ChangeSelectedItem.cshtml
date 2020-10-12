@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "ChangeSelectedItem";
+}
+
+<h1>ChangeSelectedItem</h1>
+
+<form asp-action="ChangeSelectedItem">
+    <h3>Selected Student: @ViewBag.Student</h3>
+    <select name="student" autopostback="true">
+        <option>pilih student</option>
+        <option>Erick</option>
+        <option>Budi</option>
+        <option>Bambang</option>
+    </select>
+</form>

@@ -5,47 +5,44 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyASPCoreProject.DAL;
-using MyASPCoreProject.Models;
 
 namespace MyASPCoreProject.Controllers
 {
-    public class CourseController : Controller
+    public class EnrollmentController : Controller
     {
-        private ICourse _course;
-        public CourseController(ICourse course)
+        private IEnrollment _enrollment;
+        public EnrollmentController(IEnrollment enrollment)
         {
-            _course = course;
+            _enrollment = enrollment;
         }
 
-        // GET: CourseController
+        // GET: EnrollmentController
         public ActionResult Index()
         {
-            var models = _course.GetAll();
+            var models = _enrollment.GetAll();
             return View(models);
         }
 
-        // GET: CourseController/Details/5
+        // GET: EnrollmentController/Details/5
         public ActionResult Details(int id)
         {
-            var model = _course.GetById(id.ToString());
-            return View(model);
+            return View();
         }
 
-        // GET: CourseController/Create
+        // GET: EnrollmentController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CourseController/Create
+        // POST: EnrollmentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Course course)
+        public ActionResult Create(IFormCollection collection)
         {
             try
             {
-                var result = _course.Insert(course);
-                return Content("Data berhasil ditambah");
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -53,37 +50,34 @@ namespace MyASPCoreProject.Controllers
             }
         }
 
-        // GET: CourseController/Edit/5
+        // GET: EnrollmentController/Edit/5
         public ActionResult Edit(int id)
         {
-            var model = _course.GetById(id.ToString());
-            return View(model);
+            return View();
         }
 
-        // POST: CourseController/Edit/5
+        // POST: EnrollmentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Course course)
+        public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                var result = _course.Update(course);
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch
             {
-                ViewBag.Error = ex.Message;
                 return View();
             }
         }
 
-        // GET: CourseController/Delete/5
+        // GET: EnrollmentController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CourseController/Delete/5
+        // POST: EnrollmentController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
